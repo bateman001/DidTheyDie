@@ -1,15 +1,18 @@
+import { useContext } from "react";
+import { SearchedContext } from "../context/SearchedContext";
 import { Card } from "./Card";
-import { ReturnData, ReturnDataType } from "./Home";
-
+import { ReturnDataType } from "./Home";
 interface DisplayCharacterDeathProps {
     character: ReturnDataType;
     searching: boolean;
-    hasSearched: boolean;
 }
 
 export const DisplayCharacterDeath = (props: DisplayCharacterDeathProps) => {
     // Variables
-    const { character, searching, hasSearched } = props;
+    const { character, searching } = props;
+
+    // Context
+    const context = useContext(SearchedContext);
 
     // Functions
     const initialMessage = () => {
@@ -50,8 +53,8 @@ export const DisplayCharacterDeath = (props: DisplayCharacterDeathProps) => {
                 alignItems: "center"
             }}
         >
-            {character.length === 0 && !hasSearched && initialMessage()}
-            {character.length === 0 && hasSearched && noResult()}
+            {character.length === 0 && !context.searched && initialMessage()}
+            {character.length === 0 && context.searched && noResult()}
             {character.length > 0 && !!character[0].died && characterDied()}
             {character.length > 0 && !character[0].died && characterNotDead()}
         </div>

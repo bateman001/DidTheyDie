@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { SearchedContext } from "../context/SearchedContext";
 import { DisplayCharacterDeath } from "./DisplayCharacterDeath";
 import { Search } from "./Search";
 
@@ -27,11 +28,20 @@ export const Home = () => {
     // Variables
     const url = `https://anapioficeandfire.com/api/characters?name=`;
 
+    // Context
+    const context = useContext(SearchedContext);
+
     // States
     const [character, setCharacter] = useState<string>("");
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [characterData, setCharacterData] = useState<ReturnDataType>([]);
-    const [startedSearch, setStartedSearching] = useState<boolean>(false);
+
+    // useEffect
+    useEffect(() => {
+        if (!context.searched) {
+            resetCharacterData();
+        }
+    }, [context.searched]);
 
     // Functions
     const search = async (): Promise<ReturnData[]> => {
@@ -45,18 +55,22 @@ export const Home = () => {
 
     const SearchCharacter = async () => {
         setSubmitting(true);
-        setStartedSearching(true);
+        context.changeSearched(true);
         let data = await search();
 
         setCharacterData(data);
         setSubmitting(false);
     };
 
+    const resetCharacterData = () => {
+        setCharacter("");
+        setCharacterData([]);
+    };
     return (
         <div>
             <h1>did {!!character ? character : `they`} die?</h1>
             <Search update={character} updateSearch={setCharacter} search={SearchCharacter} />
-            <DisplayCharacterDeath character={characterData} searching={submitting} hasSearched={startedSearch} />
+            <DisplayCharacterDeath character={characterData} searching={submitting} />
         </div>
     );
 };
