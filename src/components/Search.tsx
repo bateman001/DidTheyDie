@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { KeyboardEventHandler, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
 interface SearchProps {
@@ -47,8 +47,14 @@ export const Search = (props: SearchProps) => {
                     color: "white"
                 }}
                 onChange={e => updateSearch(capitalizeSearch(e.target.value))}
+                onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.code === "Enter") {
+                        search();
+                    }
+                }}
             ></input>
             <button
+                type="submit"
                 style={{
                     backgroundColor: "transparent",
                     color: hover ? "white" : "#2A2A2A",
