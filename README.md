@@ -41,6 +41,6 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 1. Host on Vercel
 2. Practice in Codepad
-3. Change Title and icon
+3. Change icon
 4. Add Loading
 5. Spice up site

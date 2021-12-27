@@ -17,7 +17,7 @@ export const DisplayCharacterDeath = (props: DisplayCharacterDeathProps) => {
     // Functions
     const initialMessage = () => {
         const title = "When you play the game of thrones, you win or you die.";
-        const sub = "search for any character in the Game of Thrones Universe and find out";
+        const sub = "Search for any character in the Game of Thrones Universe and find out.";
         return <Card title={title} subtite={sub} />;
     };
 
@@ -47,9 +47,9 @@ export const DisplayCharacterDeath = (props: DisplayCharacterDeathProps) => {
     return (
         <div
             style={{
+                flex: 0.7,
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
                 alignItems: "center"
             }}
         >

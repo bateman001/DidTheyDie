@@ -67,9 +67,12 @@ export const Home = () => {
         setCharacterData([]);
     };
     return (
-        <div>
-            <h1>did {!!character ? character : `they`} die?</h1>
-            <Search update={character} updateSearch={setCharacter} search={SearchCharacter} />
+        <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+            <div style={{ flex: 0.3 }}>
+                <h1>did {!!character ? character : `they`} die?</h1>
+                <Search update={character} updateSearch={setCharacter} search={SearchCharacter} />
+            </div>
+
             <DisplayCharacterDeath character={characterData} searching={submitting} />
         </div>
     );
