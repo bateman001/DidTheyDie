@@ -31,7 +31,7 @@ export const DisplayCharacterDeath = (props: DisplayCharacterDeathProps) => {
         const char = character[0];
         const gender = char.gender === "Male" ? "He" : "She";
         const title = `${char.name} is dead!`;
-        const message = `Unfortunately ${char.name} is dead. They are out of the game. ${gender} died ${char.died}`;
+        const message = `Unfortunately ${char.name} is dead. ${gender} is out of the game. ${gender} died ${char.died}`;
 
         return <Card title={title} subtite={message} />;
     };
@@ -44,19 +44,24 @@ export const DisplayCharacterDeath = (props: DisplayCharacterDeathProps) => {
 
         return <Card title={title} subtite={message} />;
     };
-    return (
-        <div
-            style={{
-                flex: 0.7,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center"
-            }}
-        >
-            {character.length === 0 && !context.searched && initialMessage()}
-            {character.length === 0 && context.searched && noResult()}
-            {character.length > 0 && !!character[0].died && characterDied()}
-            {character.length > 0 && !character[0].died && characterNotDead()}
-        </div>
-    );
+
+    if (searching) {
+        return <div></div>;
+    } else {
+        return (
+            <div
+                style={{
+                    flex: 0.7,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center"
+                }}
+            >
+                {character.length === 0 && !context.searched && initialMessage()}
+                {character.length === 0 && context.searched && noResult()}
+                {character.length > 0 && !!character[0].died && characterDied()}
+                {character.length > 0 && !character[0].died && characterNotDead()}
+            </div>
+        );
+    }
 };

@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { SearchedContext } from "../context/SearchedContext";
+import { Disclaimer } from "./Disclaimer";
 import { DisplayCharacterDeath } from "./DisplayCharacterDeath";
 import { Search } from "./Search";
 
@@ -35,6 +36,7 @@ export const Home = () => {
     const [character, setCharacter] = useState<string>("");
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [characterData, setCharacterData] = useState<ReturnDataType>([]);
+    const [showDisclaimer, setshowDisclaimer] = useState<boolean>(true);
 
     // useEffect
     useEffect(() => {
@@ -66,6 +68,7 @@ export const Home = () => {
         setCharacter("");
         setCharacterData([]);
     };
+
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
             <div style={{ flex: 0.3 }}>
@@ -74,6 +77,11 @@ export const Home = () => {
             </div>
 
             <DisplayCharacterDeath character={characterData} searching={submitting} />
+            {showDisclaimer && (
+                <div style={{ position: "absolute", bottom: 0 }}>
+                    <Disclaimer closeDisclaimer={setshowDisclaimer} />
+                </div>
+            )}
         </div>
     );
 };
