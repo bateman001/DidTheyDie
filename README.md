@@ -38,9 +38,3 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## TODO
-
-1. Host on Vercel
-2. Practice in Codepad
-3. Change icon
-4. Add Loading
-5. Spice up site

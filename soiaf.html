@@ -1,0 +1,393 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Song of Ice and Fire</title>
+        <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+        <script src="https://unpkg.com/@babel/standalone@7.13.12/babel.min.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel&family=Cormorant+Garamond:ital@1&family=Marcellus+SC&family=Raleway:wght@300&family=Ubuntu:wght@300&display=swap"
+            rel="stylesheet"
+        />
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500&family=Cinzel&family=Cormorant+Garamond:ital@1&family=Marcellus+SC&family=Markazi+Text&family=Raleway:ital,wght@0,300;1,200&family=Suranna&family=Ubuntu:wght@300&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            .App {
+                text-align: center;
+            }
+
+            body {
+                height: 100vh;
+                background-color: #000000;
+            }
+
+            h1 {
+                font-size: 50px;
+            }
+
+            h1,
+            h2 {
+                font-family: "Cinzel", serif;
+                font-family: "Cormorant Garamond", serif;
+                font-family: "Marcellus SC", serif;
+            }
+
+            p {
+                font-family: "Bodoni Moda", serif;
+                font-family: "Cinzel", serif;
+                font-family: "Cormorant Garamond", serif;
+                font-family: "Marcellus SC", serif;
+                font-family: "Markazi Text", serif;
+                font-family: "Raleway", sans-serif;
+                font-size: 20px;
+            }
+
+            h1,
+            h2,
+            p {
+                color: white;
+            }
+
+            input {
+                height: 30px;
+                padding-left: 25px;
+                background-color: #000000;
+                border: 0.05px solid #2a2a2a;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/babel">
+            const SearchedContext = React.createContext({});
+
+            const Searched = props => {
+                const [searched, setsearched] = React.useState(false);
+
+                const changeSearched = change => {
+                    setsearched(change);
+                };
+
+                const values = {
+                    searched,
+                    changeSearched
+                };
+
+                return <SearchedContext.Provider value={values}>{props.children}</SearchedContext.Provider>;
+            };
+
+            const Disclaimer = props => {
+                // Variables
+                const { closeDisclaimer } = props;
+
+                return (
+                    <div
+                        style={{
+                            border: "1px solid #D0CDCC",
+                            margin: 20,
+                            display: "flex",
+                            backgroundColor: "#D0CDCC",
+                            justifyContent: "space-around"
+                        }}
+                    >
+                        <div
+                            style={{
+                                padding: 5,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}
+                        >
+                            <p
+                                style={{
+                                    color: "black"
+                                }}
+                            >
+                                DISCLAIMER: This API may consider characters who have died in the cinematic uniserse to
+                                be alive, because GRR Martin has yet to finish writing the books. Seasons 6-8 is not
+                                entirely cannon (as it should be).
+                            </p>
+                        </div>
+                        <div
+                            style={{
+                                padding: 5,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}
+                        >
+                            <button style={{ padding: 5, cursor: "pointer" }} onClick={() => closeDisclaimer(false)}>
+                                Accept
+                            </button>
+                        </div>
+                    </div>
+                );
+            };
+
+            const Card = props => {
+                // Variables
+                const { title, subtite } = props;
+
+                // Context
+                const context = React.useContext(SearchedContext);
+
+                return (
+                    <div
+                        style={{
+                            border: "1px solid #2a2a2a",
+                            width: "30%",
+                            height: "30vh",
+                            backgroundColor: "#2a2a2a69",
+                            display: "flex",
+                            flexDirection: "column"
+                        }}
+                    >
+                        <div
+                            style={{
+                                flex: 0.1,
+                                display: "flex",
+                                justifyContent: "flex-end",
+                                alignItems: "center",
+                                padding: 5
+                            }}
+                        >
+                            {context.searched && (
+                                <div style={{ cursor: "pointer" }} onClick={() => context.changeSearched(false)}>
+                                    <p>X</p>
+                                </div>
+                            )}
+                        </div>
+                        <div style={{ flex: 0.9, padding: 5 }}>
+                            <h2>{title}</h2>
+                            <p>{subtite}</p>
+                        </div>
+                    </div>
+                );
+            };
+
+            const DisplayCharacterDeath = props => {
+                // Variables
+                const { character, searching } = props;
+
+                // Context
+                const context = React.useContext(SearchedContext);
+
+                // Functions
+                const initialMessage = () => {
+                    const title = "When you play the game of thrones, you win or you die.";
+                    const sub = "Search for any character in the Game of Thrones Universe and find out.";
+                    return <Card title={title} subtite={sub} />;
+                };
+
+                const noResult = () => {
+                    const title = "We have no idea who you are looking for!";
+                    const sub = "Search for someone who exists in the GOT universe instead";
+                    return <Card title={title} subtite={sub} />;
+                };
+
+                const characterDied = () => {
+                    const char = character[0];
+                    const gender = char.gender === "Male" ? "He" : "She";
+                    const title = `${char.name} is dead!`;
+                    const message = `Unfortunately ${char.name} is dead. ${gender} is out of the game. ${gender} died ${char.died}`;
+
+                    return <Card title={title} subtite={message} />;
+                };
+
+                const characterNotDead = () => {
+                    const char = character[0];
+                    const gender = char.gender === "Male" ? "He" : "She";
+                    const title = `${char.name} is alive!`;
+                    const message = `Oooof that was a close one! ${gender} is still in the game!`;
+
+                    return <Card title={title} subtite={message} />;
+                };
+
+                if (searching) {
+                    return <div></div>;
+                } else {
+                    return (
+                        <div
+                            style={{
+                                flex: 0.7,
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center"
+                            }}
+                        >
+                            {character.length === 0 && !context.searched && initialMessage()}
+                            {character.length === 0 && context.searched && noResult()}
+                            {character.length > 0 && !!character[0].died && characterDied()}
+                            {character.length > 0 && !character[0].died && characterNotDead()}
+                        </div>
+                    );
+                }
+            };
+
+            const Search = props => {
+                // Variables
+                const { updateSearch, update, search } = props;
+
+                // States
+                const [hover, setHover] = React.useState(false);
+
+                // Functions
+                const capitalizeSearch = text => {
+                    if (text) {
+                        return text
+                            .split(" ")
+                            .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+                            .join(" ");
+                    } else return "";
+                };
+
+                return (
+                    <nav
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            margin: 10
+                        }}
+                    >
+                        <input
+                            type="text"
+                            placeholder="Search Characters..."
+                            value={update}
+                            style={{
+                                width: "70%",
+                                height: 40,
+                                borderRadius: "30px",
+                                padding: 10,
+                                fontSize: "20px",
+                                color: "white"
+                            }}
+                            onChange={e => updateSearch(capitalizeSearch(e.target.value))}
+                            onKeyUp={e => {
+                                if (e.code === "Enter") {
+                                    search();
+                                }
+                            }}
+                        ></input>
+                        <button
+                            type="button"
+                            style={{
+                                backgroundColor: "transparent",
+                                color: hover ? "white" : "#2A2A2A",
+                                border: "none",
+                                cursor: "pointer"
+                            }}
+                            onClick={() => search()}
+                            onMouseOver={() => setHover(true)}
+                            onMouseLeave={() => setHover(false)}
+                        >
+                            Submit
+                        </button>
+                    </nav>
+                );
+            };
+
+            const Home = () => {
+                // Variables
+                const url = `https://anapioficeandfire.com/api/characters?name=`;
+
+                // Context
+                const context = React.useContext(SearchedContext);
+
+                // States
+                const [character, setCharacter] = React.useState("");
+                const [submitting, setSubmitting] = React.useState(false);
+                const [characterData, setCharacterData] = React.useState([]);
+                const [showDisclaimer, setshowDisclaimer] = React.useState(true);
+
+                // Functions
+                const search = async () => {
+                    const searchUrl = url + character;
+
+                    const res = await fetch(searchUrl);
+                    const data = await res.json();
+
+                    return data;
+                };
+
+                async function SearchCharacter() {
+                    setSubmitting(true);
+                    context.changeSearched(true);
+                    let data = await search();
+
+                    setCharacterData(data);
+                    setSubmitting(false);
+                }
+
+                function resetCharacterData() {
+                    setCharacter("");
+                    setCharacterData([]);
+                }
+
+                // useEffect
+                React.useEffect(() => {
+                    if (!context.searched) {
+                        resetCharacterData();
+                    }
+                }, [context.searched]);
+
+                return (
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            height: "100vh"
+                        }}
+                    >
+                        <div style={{ flex: 0.3 }}>
+                            <h1 style={{ textAlign: "center" }}>Did {!!character ? character : `they`} die?</h1>
+                            <Search update={character} updateSearch={setCharacter} search={SearchCharacter} />
+                        </div>
+                        <DisplayCharacterDeath character={characterData} searching={submitting} />
+
+                        {showDisclaimer && (
+                            <div style={{ position: "absolute", bottom: 0 }}>
+                                <Disclaimer closeDisclaimer={setshowDisclaimer} />
+                            </div>
+                        )}
+                    </div>
+                );
+            };
+
+            function App() {
+                return (
+                    <div style={{ border: "1px solid black" }}>
+                        <Searched>
+                            <Home />
+                        </Searched>
+                    </div>
+                );
+            }
+
+            ReactDOM.render(<App />, document.getElementById("root"));
+        </script>
+    </body>
+</html>
+
+<!-- 
+Your previous HTML/JS/CSS content is preserved below:
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>React Pad</title>
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.13.12/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"/>
+  </body>
+</html>
+
+ -->
